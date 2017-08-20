@@ -4,29 +4,29 @@ environment:
   global:
       MSYS2_BASEVER: 20161025
   matrix:
-    - BUILD_TYPE: CYGWIN
+    - TYPE: CYGWIN
       ARCH: x86
       CYGWIN: C:\Cygwin
       CHOST: i686-w64-mingw32
       CC: i686-w64-mingw32-gcc
-    - BUILD_TYPE: CYGWIN
+    - TYPE: CYGWIN
       ARCH: x86_64
       CYGWIN: C:\Cygwin64
       CHOST: x86_64-w64-mingw32
       CC: x86_64-w64-mingw32-gcc
-    - BUILD_TYPE: MSYS2
+    - TYPE: MSYS2
       MSYS2_ARCH: i686
-    - BUILD_TYPE: MSYS2
+    - TYPE: MSYS2
       MSYS2_ARCH: x86_64
 
 build_script:
   - cmd: >-
-      if "%BUILD_TYPE%" == "CYGWIN" (
+      if "%TYPE%" == "CYGWIN" (
             "%CYGWIN%\\setup-%ARCH%.exe -g -q -P mingw64-i686-openssl,mingw64-x86_64-openssl,cygwin-devel"
             "%CYGWIN%\\bin\\bash -lc 'set -eux; cd /cygdrive/c/projects/%APPVEYOR_PROJECT_SLUG%; autoreconf -iv; ./configure --prefix=/ --libdir=/lib --host=$CHOST --build=i686-pc-cygwin --program-prefix=\'\'; make'"
           )
   - cmd: >-
-      if "%BUILD_TYPE%" == "MSYS2" (
+      if "%TYPE%" == "MSYS2" (
             C:\"Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
             appveyor DownloadFile "http://kent.dl.sourceforge.net/project/msys2/Base/%MSYS2_ARCH%/msys2-base-%MSYS2_ARCH%-%MSYS2_BASEVER%.tar.xz" -FileName "msys2.tar.xz"
             7z x msys2.tar.xz
