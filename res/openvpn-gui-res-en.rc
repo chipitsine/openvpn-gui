@@ -33,7 +33,7 @@ BEGIN
     CHECKBOX "Save password", ID_CHK_SAVE_PASS, 6, 33, 100, 10
     PUSHBUTTON "OK", IDOK, 20, 49, 50, 14
     PUSHBUTTON "Cancel", IDCANCEL, 90, 49, 50, 14
-    LTEXT "", ID_TXT_WARNING, 6, 65, 100, 10
+    LTEXT "", ID_TXT_WARNING, 6, 73, 100, 10
 END
 
 /* Auth Username/Password Dialog */
