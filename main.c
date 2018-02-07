@@ -426,12 +426,6 @@ HandleCopyDataMessage(const COPYDATASTRUCT *copy_data)
     }
     else if(copy_data->dwData == WM_OVPN_STOP && c)
         StopOpenVPN(c);
-    else if(copy_data->dwData == WM_OVPN_RESTART && c)
-    {
-        if (!o.silent_connection)
-            ForceForegroundWindow(o.hWnd);
-        RestartOpenVPN(c);
-    }
     else if(copy_data->dwData == WM_OVPN_SHOWSTATUS && c->hwndStatus && c)
     {
         ForceForegroundWindow(o.hWnd);
@@ -519,9 +513,6 @@ LRESULT CALLBACK WindowProcedure (HWND hwnd, UINT message, WPARAM wParam, LPARAM
       }
       if ( (LOWORD(wParam) >= IDM_DISCONNECTMENU) && (LOWORD(wParam) < IDM_DISCONNECTMENU + MAX_CONFIGS) ) {
         StopOpenVPN(&o.conn[LOWORD(wParam) - IDM_DISCONNECTMENU]);
-      }
-      if ( (LOWORD(wParam) >= IDM_RECONNECTMENU) && (LOWORD(wParam) < IDM_RECONNECTMENU + MAX_CONFIGS) ) {
-        RestartOpenVPN(&o.conn[LOWORD(wParam) - IDM_RECONNECTMENU]);
       }
       if ( (LOWORD(wParam) >= IDM_STATUSMENU) && (LOWORD(wParam) < IDM_STATUSMENU + MAX_CONFIGS) ) {
         ShowWindow(o.conn[LOWORD(wParam) - IDM_STATUSMENU].hwndStatus, SW_SHOW);

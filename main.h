@@ -51,7 +51,7 @@
 
 #define WM_OVPN_STOP           (WM_APP + 10)
 #define WM_OVPN_SUSPEND        (WM_APP + 11)
-#define WM_OVPN_RESTART        (WM_APP + 12)
+#define WM_OVPN_RESTART        (WM_APP + 12) 
 #define WM_OVPN_START          (WM_APP + 13)
 #define WM_OVPN_STOPALL        (WM_APP + 14)
 #define WM_OVPN_SHOWSTATUS     (WM_APP + 15)

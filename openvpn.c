@@ -1090,7 +1090,6 @@ OnStop(connection_t *c, UNUSED char *msg)
         SetDlgItemText(c->hwndStatus, ID_TXT_STATUS, LoadLocalizedString(IDS_NFO_STATE_DISCONNECTED));
         SetStatusWinIcon(c->hwndStatus, ID_ICO_DISCONNECTED);
         EnableWindow(GetDlgItem(c->hwndStatus, ID_DISCONNECT), FALSE);
-        EnableWindow(GetDlgItem(c->hwndStatus, ID_RESTART), FALSE);
         if (o.silent_connection == 0)
         {
             SetForegroundWindow(c->hwndStatus);
@@ -1116,7 +1115,6 @@ OnStop(connection_t *c, UNUSED char *msg)
         CheckAndSetTrayIcon();
         c->state = disconnected;
         EnableWindow(GetDlgItem(c->hwndStatus, ID_DISCONNECT), FALSE);
-        EnableWindow(GetDlgItem(c->hwndStatus, ID_RESTART), FALSE);
         SetStatusWinIcon(c->hwndStatus, ID_ICO_DISCONNECTED);
         SetDlgItemText(c->hwndStatus, ID_TXT_STATUS, LoadLocalizedString(txt_id));
         if (o.silent_connection == 0)
@@ -1564,7 +1562,6 @@ RenderStatusWindow(HWND hwndDlg, UINT w, UINT h)
         MoveWindow(GetDlgItem(hwndDlg, ID_TXT_BYTECOUNT), DPI_SCALE(20), h - DPI_SCALE(55), w-DPI_SCALE(210), DPI_SCALE(15), TRUE);
         MoveWindow(GetDlgItem(hwndDlg, ID_TXT_VERSION), w-DPI_SCALE(180), h - DPI_SCALE(55), DPI_SCALE(170), DPI_SCALE(15), TRUE);
         MoveWindow(GetDlgItem(hwndDlg, ID_DISCONNECT), DPI_SCALE(20), h - DPI_SCALE(30), DPI_SCALE(110), DPI_SCALE(23), TRUE);
-        MoveWindow(GetDlgItem(hwndDlg, ID_RESTART), DPI_SCALE(145), h - DPI_SCALE(30), DPI_SCALE(110), DPI_SCALE(23), TRUE);
         MoveWindow(GetDlgItem(hwndDlg, ID_HIDE), w - DPI_SCALE(130), h - DPI_SCALE(30), DPI_SCALE(110), DPI_SCALE(23), TRUE);
 }
 
@@ -1647,12 +1644,6 @@ StatusDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             else
                 DestroyWindow(hwndDlg);
             return TRUE;
-
-        case ID_RESTART:
-            c->state = reconnecting;
-            SetFocus(GetDlgItem(c->hwndStatus, ID_EDT_LOG));
-            RestartOpenVPN(c);
-            return TRUE;
         }
         break;
 
@@ -1689,7 +1680,6 @@ StatusDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         c->state = disconnecting;
         RunDisconnectScript(c, false);
         EnableWindow(GetDlgItem(c->hwndStatus, ID_DISCONNECT), FALSE);
-        EnableWindow(GetDlgItem(c->hwndStatus, ID_RESTART), FALSE);
         SetMenuStatus(c, disconnecting);
         SetDlgItemText(c->hwndStatus, ID_TXT_STATUS, LoadLocalizedString(IDS_NFO_STATE_WAIT_TERM));
         SetEvent(c->exit_event);
@@ -1700,7 +1690,6 @@ StatusDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         c = (connection_t *) GetProp(hwndDlg, cfgProp);
         c->state = suspending;
         EnableWindow(GetDlgItem(c->hwndStatus, ID_DISCONNECT), FALSE);
-        EnableWindow(GetDlgItem(c->hwndStatus, ID_RESTART), FALSE);
         SetMenuStatus(c, disconnecting);
         SetDlgItemText(c->hwndStatus, ID_TXT_STATUS, LoadLocalizedString(IDS_NFO_STATE_WAIT_TERM));
         SetEvent(c->exit_event);
@@ -1715,18 +1704,6 @@ StatusDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             /* openvpn failed to respond to stop signal -- terminate */
             TerminateOpenVPN(c);
             KillTimer (hwndDlg, IDT_STOP_TIMER);
-        }
-        break;
-
-    case WM_OVPN_RESTART:
-        c = (connection_t *) GetProp(hwndDlg, cfgProp);
-        /* external messages can trigger when we are not ready -- check the state */
-        if (IsWindowEnabled(GetDlgItem(c->hwndStatus, ID_RESTART)))
-            ManagementCommand(c, "signal SIGHUP", NULL, regular);
-        if (!o.silent_connection)
-        {
-            SetForegroundWindow(c->hwndStatus);
-            ShowWindow(c->hwndStatus, SW_SHOW);
         }
         break;
     }
@@ -2061,15 +2038,6 @@ void
 SuspendOpenVPN(int config)
 {
     PostMessage(o.conn[config].hwndStatus, WM_OVPN_SUSPEND, 0, 0);
-}
-
-void
-RestartOpenVPN(connection_t *c)
-{
-    if (c->hwndStatus)
-        PostMessage(c->hwndStatus, WM_OVPN_RESTART, 0, 0);
-    else /* Not started: treat this as a request to connect */
-        StartOpenVPN(c);
 }
 
 void

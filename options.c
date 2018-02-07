@@ -229,12 +229,6 @@ add_option(options_t *options, int i, TCHAR **p)
             options->action = WM_OVPN_STOP;
             options->action_arg = p[2];
         }
-        else if (streq(p[1], _T("reconnect")) && p[2])
-        {
-            ++i;
-            options->action = WM_OVPN_RESTART;
-            options->action_arg = p[2];
-        }
         else if (streq(p[1], _T("status")) && p[2])
         {
             ++i;
