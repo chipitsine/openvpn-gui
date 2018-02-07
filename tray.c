@@ -64,7 +64,6 @@ CreatePopupMenus()
         if (o.service_only == 0) {
             AppendMenu(hMenu, MF_STRING, IDM_CONNECTMENU, LoadLocalizedString(IDS_MENU_CONNECT));
             AppendMenu(hMenu, MF_STRING, IDM_DISCONNECTMENU, LoadLocalizedString(IDS_MENU_DISCONNECT));
-            AppendMenu(hMenu, MF_STRING, IDM_RECONNECTMENU, LoadLocalizedString(IDS_MENU_RECONNECT));
             AppendMenu(hMenu, MF_STRING, IDM_STATUSMENU, LoadLocalizedString(IDS_MENU_STATUS));
             AppendMenu(hMenu, MF_SEPARATOR, 0, 0);
         }
@@ -119,7 +118,6 @@ CreatePopupMenus()
             if (o.service_only == 0) {
                 AppendMenu(hMenuConn[i], MF_STRING, IDM_CONNECTMENU + i, LoadLocalizedString(IDS_MENU_CONNECT));
                 AppendMenu(hMenuConn[i], MF_STRING, IDM_DISCONNECTMENU + i, LoadLocalizedString(IDS_MENU_DISCONNECT));
-                AppendMenu(hMenuConn[i], MF_STRING, IDM_RECONNECTMENU + i, LoadLocalizedString(IDS_MENU_RECONNECT));
                 AppendMenu(hMenuConn[i], MF_STRING, IDM_STATUSMENU + i, LoadLocalizedString(IDS_MENU_STATUS));
                 AppendMenu(hMenuConn[i], MF_SEPARATOR, 0, 0);
             }
