@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 
 os: linux
 language: cpp
@@ -25,12 +25,7 @@ matrix:
 
 addons:
   apt:
-    packages: [ cppcheck ]
-
-install:
-    - sudo apt-add-repository "deb http://archive.ubuntu.com/ubuntu xenial main universe"
-    - sudo apt-get update
-    - sudo apt-get -y install dpkg gcc-mingw-w64
+    packages: [ cppcheck, gcc-mingw-w64 ]
 
 before_script:
     - unset CC; unset CXX
