@@ -38,7 +38,3 @@ script:
 # build from tarball
     - make distdir=dist dist && tar xvf dist.tar.gz && cd dist
     - ./configure --prefix=/ --libdir=/lib --host=$CHOST --build=x86_64-pc-linux-gnu --program-prefix='' $CONFIG && make
-    
-cache:
-  directories:
-  - download-cache
