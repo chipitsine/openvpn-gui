@@ -12,13 +12,13 @@ env:
 matrix:
   fast_finish: true
   include:
-    - compiler: ": Win32"
+    - compiler: gcc
       env: CHOST=i686-w64-mingw32 CONFIG=""
-    - compiler: ": Win64"
+    - compiler: gcc
       env: CHOST=x86_64-w64-mingw32 CONFIG=""
-    - compiler: ": Win32"
+    - compiler: gcc
       env: CHOST=i686-w64-mingw32 CONFIG="--disable-password-change"
-    - compiler: ": Win64"
+    - compiler: gcc
       env: CHOST=x86_64-w64-mingw32 CONFIG="--disable-password-change"
   exclude:
     - compiler: gcc
@@ -37,3 +37,7 @@ script:
 # build from tarball
     - make distdir=dist dist && tar xvf dist.tar.gz && cd dist
     - ./configure --prefix=/ --libdir=/lib --host=$CHOST --build=x86_64-pc-linux-gnu --program-prefix='' $CONFIG && make
+
+cache:
+  directories:
+  - download-cache
